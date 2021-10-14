@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'dart:math';
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -134,7 +134,6 @@ class _CalculatedPulsationState extends State<CalculatedPulsation> {
                 style: TextStyle(color: Colors.black),
                 value: _sexo,
                 onChanged: (option) {
-                  print(option);
                   setState(() {
                     _sexo = option.toString();
                   });
@@ -183,33 +182,29 @@ class _CalculatedPulsationState extends State<CalculatedPulsation> {
   }
 
   void addToBd(Map persona) async {
-    try {
-      var url = 'https://localhost:5001/api/Persona';
-      // var response = await http.post(Uri.parse(url), body: {
-      //   'identificacion': _identification,
-      //   'nombre': _nombre,
-      //   'edad': _edad,
-      //   'pulsacion': 0
-      // });
-      http.get(Uri.parse(url)).then((res){
+    /*var url = Uri.parse('http://7e67-186-80-54-45.ngrok.io/api/Persona');
+
+    final response = await http.get(url);
+    print(response);*/
+      var url = 'http://95c4-186-80-54-45.ngrok.io/api/Persona';
+      var body = json.encode(persona);
+      final response = await http.post(Uri.parse(url),headers: {'Content-Type': 'application/json; charset=UTF-8'}, body:body );
+      final pasar = json.decode(response.body);
+      print(pasar);
+      /*http.get(Uri.parse(url)).then((res) {
         debugger();
         print(res);
-      });
-      
-    } catch (e) {
-      print(e);
-    }
-  }
+      });*/
 
+  }
   Widget _createPerson() {
     Map<String, dynamic> persona = {
       'identificacion': _identification,
       'nombre': _nombre,
       'edad': _edad,
-      'pulsacion': _pulsation().toString()
+      'sexo': 'm'
     };
-    if(_buttonPulsed)
-    addToBd(persona);
+    if (_buttonPulsed) addToBd(persona);
 
     return (_buttonPulsed)
         ? Card(
@@ -283,4 +278,9 @@ class _CalculatedPulsationState extends State<CalculatedPulsation> {
             ))
         : Card();
   }
+
+ 
+  
 }
+
+  

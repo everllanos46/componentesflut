@@ -84,7 +84,7 @@ class _SliderPageState extends State<SliderPage> {
       value: _checkState,
       onChanged: (valor){
         setState(() {
-          _checkState=valor!;
+          _checkState=valor;
         });
       }
       );
